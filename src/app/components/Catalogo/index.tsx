@@ -22,7 +22,6 @@ const DEBOUNCE_MS = 400
 
 const Catalogo = () => {
     const { t } = useLista()
-
     const [search, setSearch] = useState("")
     const [debouncedSearch, setDebouncedSearch] = useState("")
     const [setId, setSetId] = useState("")
@@ -38,7 +37,6 @@ const Catalogo = () => {
     const [result, setResult] = useState<Result | null>(null)
     const [selected, setSelected] = useState<Card | null>(null)
 
-    // Vocabularios de los filtros (cada uno independiente: si uno falla, el resto sigue).
     useEffect(() => {
         const ctrl = new AbortController()
         const load = <T,>(fn: (s: AbortSignal) => Promise<T>, set: (v: T) => void) =>

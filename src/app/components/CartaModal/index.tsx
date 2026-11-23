@@ -17,11 +17,10 @@ const describe = (card: Card) =>
     ?? card.rules?.[0]
 
 const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
-    const { t, lang, isInList, addToList, deleteFromList } = useLista()
+    const { t, lang } = useLista()
     const closeRef = useRef<HTMLButtonElement>(null)
     const locale = locales[lang]
     const prices = getPriceSummary(card)
-    const fav = isInList(card.id)
     const type = card.types?.[0]
 
     useEffect(() => {
@@ -96,14 +95,6 @@ const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
                                 </div>
                             ))}
                         </dl>
-
-                        <button
-                            className={`favButton${fav ? " favActive" : ""}`}
-                            onClick={() => (fav ? deleteFromList(card.id) : addToList(card))}
-                            aria-pressed={fav}
-                        >
-                            {fav ? "★" : "☆"} {fav ? t.removeFav : t.addFav}
-                        </button>
                     </div>
                 </section>
 

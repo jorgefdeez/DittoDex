@@ -1,7 +1,6 @@
 'use client'
 import Image from "next/image"
 import { Card } from "@/app/types/type"
-import { useLista } from "@/context/Provider"
 import { PAGE_SIZE } from "@/api/pokemonTcg"
 
 import "./style.css"
@@ -13,8 +12,6 @@ type Props = {
 }
 
 const CardGrid = ({ cards, loading, onSelect }: Props) => {
-    const { isInList } = useLista()
-
     if (loading) {
         return (
             <div className="cardGrid" aria-busy="true">
@@ -36,7 +33,6 @@ const CardGrid = ({ cards, loading, onSelect }: Props) => {
                             sizes="(min-width: 1400px) 130px, (min-width: 900px) 16vw, 45vw"
                             unoptimized
                         />
-                        {isInList(card.id) && <span className="cardFav" aria-hidden="true">★</span>}
                     </button>
                 </li>
             ))}
