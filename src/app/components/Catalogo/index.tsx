@@ -8,6 +8,7 @@ import Filtros from "../Filtros"
 import CardGrid from "../CardGrid"
 import Paginador from "../Paginador"
 import CartaModal from "../CartaModal"
+import { useReconnect } from "@/app/utils/useReconnect"
 
 import "./style.css"
 
@@ -19,6 +20,7 @@ type Result = {
 }
 
 const DEBOUNCE_MS = 400
+const AUTO_RETRY_MS = 10000
 
 const Catalogo = () => {
     const { t } = useLista()
@@ -29,6 +31,7 @@ const Catalogo = () => {
     const [rarity, setRarity] = useState("")
     const [page, setPage] = useState(1)
     const [reload, setReload] = useState(0)
+    const [metaReload, setMetaReload] = useState(0)
 
     const [sets, setSets] = useState<CardSet[]>([])
     const [types, setTypes] = useState<string[]>([])
@@ -37,15 +40,32 @@ const Catalogo = () => {
     const [result, setResult] = useState<Result | null>(null)
     const [selected, setSelected] = useState<Card | null>(null)
 
+    const metaMissing = sets.length === 0 || types.length === 0 || rarities.length === 0
+
     useEffect(() => {
         const ctrl = new AbortController()
-        const load = <T,>(fn: (s: AbortSignal) => Promise<T>, set: (v: T) => void) =>
-            fn(ctrl.signal).then(set).catch((e) => { if (!axios.isCancel(e)) console.warn("Pokémon TCG API:", e.message) })
-        load(getSets, setSets)
-        load(getTypes, setTypes)
-        load(getRarities, setRarities)
-        return () => ctrl.abort()
-    }, [])
+        let retryId: ReturnType<typeof setTimeout> | undefined
+        const scheduleRetry = () => {
+            if (ctrl.signal.aborted || retryId) return
+            retryId = setTimeout(() => setMetaReload((n) => n + 1), AUTO_RETRY_MS)
+        }
+        const load = <T extends unknown[]>(fn: (s: AbortSignal) => Promise<T>, set: (v: T) => void) =>
+            fn(ctrl.signal).then(set).catch((e) => {
+                if (axios.isCancel(e)) return
+                console.warn("Pokémon TCG API:", e.message)
+                scheduleRetry()
+            })
+        if (sets.length === 0) load(getSets, setSets)
+        if (types.length === 0) load(getTypes, setTypes)
+        if (rarities.length === 0) load(getRarities, setRarities)
+        return () => {
+            ctrl.abort()
+            clearTimeout(retryId)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- only reload on demand
+    }, [metaReload])
+
+    useReconnect(() => setMetaReload((n) => n + 1), metaMissing)
 
     useEffect(() => {
         const id = setTimeout(() => {
@@ -71,6 +91,17 @@ const Catalogo = () => {
     }, [requestKey])
 
     const loading = result?.key !== requestKey
+    const hasError = !loading && !!result?.error
+    const retry = useCallback(() => setReload((r) => r + 1), [])
+
+    // Never stay stuck on an error: retry periodically and as soon as the tab/connection comes back
+    useEffect(() => {
+        if (!hasError) return
+        const id = setTimeout(retry, AUTO_RETRY_MS)
+        return () => clearTimeout(id)
+    }, [hasError, retry])
+
+    useReconnect(retry, hasError)
     const totalPages = Math.max(1, Math.ceil((result?.totalCount ?? 0) / PAGE_SIZE))
 
     const withReset = (setter: (v: string) => void) => (v: string) => { setter(v); setPage(1) }
@@ -97,17 +128,17 @@ const Catalogo = () => {
             />
 
             <section className="catalogo container">
-                {!loading && result?.error ? (
+                {hasError ? (
                     <div className="catalogoMensaje catalogoError" role="alert">
                         <p>{errorText}</p>
-                        <button onClick={() => setReload((r) => r + 1)}>{t.retry}</button>
+                        <button onClick={retry}>{t.retry}</button>
                     </div>
                 ) : !loading && result?.cards.length === 0 ? (
                     <div className="catalogoMensaje"><p>{t.noResults}</p></div>
                 ) : (
                     <>
                         <p className="catalogoCount" aria-live="polite">
-                            {!loading && result ? t.results(result.totalCount) : " "}
+                            {!loading && result ? t.results(result.totalCount) : " "}
                         </p>
                         <CardGrid cards={result?.cards ?? []} loading={loading} onSelect={setSelected} />
                         {!loading && <Paginador page={page} totalPages={totalPages} setPage={goToPage} />}
