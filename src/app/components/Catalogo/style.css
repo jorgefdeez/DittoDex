@@ -1,0 +1,43 @@
+.catalogo {
+  padding-top: 10px;
+  padding-bottom: 16px;
+}
+
+.catalogoCount {
+  color: var(--text-2);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  text-align: right;
+}
+
+.catalogoMensaje {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 60px auto;
+  max-width: 520px;
+  padding: 28px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-2);
+}
+
+.catalogoError {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+}
+
+.catalogoError p {
+  color: var(--text);
+}
+
+.catalogoMensaje button {
+  padding: 8px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #0b1220;
+  font-weight: 600;
+}

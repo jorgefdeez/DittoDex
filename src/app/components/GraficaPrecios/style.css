@@ -1,0 +1,109 @@
+.grafica {
+  position: relative;
+  width: 100%;
+}
+
+.graficaLegend {
+  display: flex;
+  gap: 18px;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+
+.graficaLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotMarket { background: var(--fire); }
+.dotMean { background: var(--accent); }
+
+.graficaPlot {
+  position: relative;
+}
+
+.graficaPlot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.axisText {
+  fill: var(--text-2);
+  font-size: 12px;
+}
+
+.lineMarket,
+.lineMean {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lineMarket { stroke: var(--fire); }
+.lineMean { stroke: var(--accent); }
+
+.pointMarket {
+  fill: var(--fire);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.pointMean {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.crosshair {
+  stroke: var(--text-2);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.graficaTooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.graficaTooltip span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,68 @@
+.navHeader {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.containerNavigator {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: 76px;
+}
+
+.navLogo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navLogoText {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.navLogoDitto {
+  color: var(--accent-dim);
+}
+
+.navLogoDex {
+  color: var(--accent);
+}
+
+.navLinks {
+  display: flex;
+  gap: 24px;
+}
+
+.botones {
+  color: var(--text);
+  font-size: 1.1rem;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.botones:hover {
+  color: var(--accent);
+}
+
+.botonActivo {
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .containerNavigator {
+    gap: 16px;
+    height: 64px;
+  }
+  .navLogoText {
+    font-size: 1.4rem;
+  }
+  .navLinks {
+    gap: 14px;
+  }
+  .botones {
+    font-size: 0.95rem;
+  }
+}
