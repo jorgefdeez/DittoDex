@@ -34,6 +34,9 @@ const ui = {
     favorites: "Tus favoritas",
     favNav: "Favoritos",
     favText: "Aquí se mostrarán tus cartas favoritas.",
+    addFav: "Añadir a favoritos", removeFav: "Quitar de favoritos",
+    backFav: "Volver a favoritos",
+    favEmpty: "Todavía no tienes cartas favoritas.",
   },
   EN: {
     home: "Home", cards: "Cards", news: "News",
@@ -68,6 +71,9 @@ const ui = {
     favorites: "Your favorites",
     favNav: "Favorites",
     favText: "Your favorite cards will show up here.",
+    addFav: "Add to favorites", removeFav: "Remove from favorites",
+    backFav: "Back to favorites",
+    favEmpty: "You have no favorite cards yet.",
   },
   JP: {
     home: "ホーム", cards: "カード", news: "ニュース",
@@ -102,6 +108,9 @@ const ui = {
     favorites: "お気に入り",
     favNav: "お気に入り",
     favText: "お気に入りのカードがここに表示されます。",
+    addFav: "お気に入りに追加", removeFav: "お気に入りから削除",
+    backFav: "お気に入りに戻る",
+    favEmpty: "お気に入りのカードはまだありません。",
   },
 }
 
@@ -142,8 +151,6 @@ const seriesEs: Record<string, string> = {
 export const translateSeries = (series: string, lang: Lang) =>
   lang === "ES" ? seriesEs[series] ?? series : series
 
-// Rarezas: palabras sueltas traducidas en el orden natural del español
-// ("Rare Holo V" -> "Rara Holo V", "Illustration Rare" -> "Rara Ilustración").
 const rarityWordsEs: Record<string, string> = {
   Rare: "Rara", Common: "Común", Uncommon: "Poco común", Secret: "Secreta",
   Illustration: "Ilustración", Special: "Especial", Double: "Doble", Hyper: "Híper",
@@ -164,7 +171,6 @@ export const translateRarity = (rarity: string, lang: Lang) => {
   if (lang !== "ES") return rarity
   if (rarityOverridesEs[rarity]) return rarityOverridesEs[rarity]
   const words = rarity.replace(/_/g, " ").split(" ")
-  // En español "Rare" va delante: "Illustration Rare" -> "Rare Illustration".
   const rareIdx = words.findIndex((w) => /^rare$/i.test(w))
   if (rareIdx > 0) words.unshift(...words.splice(rareIdx, 1))
   return words.map((w) => rarityWordsEs[w] ?? rarityWordsEs[w.charAt(0) + w.slice(1).toLowerCase()] ?? w).join(" ")

@@ -55,7 +55,6 @@ const GraficaPrecios = ({ points, t, locale }: Props) => {
 
     const chart = useMemo(() => {
         const market = points.map((p) => p.value)
-        // Media acumulada de los valores reales: suaviza la tendencia de la serie.
         const mean = market.map((_, i) => market.slice(0, i + 1).reduce((a, b) => a + b, 0) / (i + 1))
         const all = [...market, ...mean]
         let lo = Math.min(...all), hi = Math.max(...all)

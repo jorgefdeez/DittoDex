@@ -100,13 +100,6 @@
   margin: 6px 0 8px;
 }
 
-.modalDesc {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
 .modalDatos {
   display: grid;
   grid-template-columns: 1fr 1fr;

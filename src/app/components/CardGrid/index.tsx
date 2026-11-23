@@ -1,6 +1,7 @@
 'use client'
 import Image from "next/image"
 import { Card } from "@/app/types/type"
+import { useLista } from "@/context/Provider"
 import { PAGE_SIZE } from "@/api/pokemonTcg"
 
 import "./style.css"
@@ -9,13 +10,16 @@ type Props = {
     cards: Card[]
     loading: boolean
     onSelect: (card: Card) => void
+    skeletonCount?: number
 }
 
-const CardGrid = ({ cards, loading, onSelect }: Props) => {
+const CardGrid = ({ cards, loading, onSelect, skeletonCount = PAGE_SIZE }: Props) => {
+    const { isFavorite } = useLista()
+
     if (loading) {
         return (
             <div className="cardGrid" aria-busy="true">
-                {Array.from({ length: PAGE_SIZE }, (_, i) => <div key={i} className="cardSkeleton" />)}
+                {Array.from({ length: skeletonCount }, (_, i) => <div key={i} className="cardSkeleton" />)}
             </div>
         )
     }
@@ -33,6 +37,7 @@ const CardGrid = ({ cards, loading, onSelect }: Props) => {
                             sizes="(min-width: 1400px) 130px, (min-width: 900px) 16vw, 45vw"
                             unoptimized
                         />
+                        {isFavorite(card.id) && <span className="cardFav" aria-hidden="true">★</span>}
                     </button>
                 </li>
             ))}

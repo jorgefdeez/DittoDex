@@ -10,14 +10,15 @@ import GraficaPrecios from "../GraficaPrecios"
 
 import "./style.css"
 
-const describe = (card: Card) =>
-    card.flavorText
-    ?? card.abilities?.find((a) => a.text)?.text
-    ?? card.attacks?.find((a) => a.text)?.text
-    ?? card.rules?.[0]
+type Props = {
+    card: Card
+    onClose: () => void
+    backLabel?: string
+}
 
-const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
-    const { t, lang } = useLista()
+const CartaModal = ({ card, onClose, backLabel }: Props) => {
+    const { t, lang, isFavorite, toggleFavorite } = useLista()
+    const fav = isFavorite(card.id)
     const closeRef = useRef<HTMLButtonElement>(null)
     const locale = locales[lang]
     const prices = getPriceSummary(card)
@@ -55,7 +56,7 @@ const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
             <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
                 <header className="modalHeader">
                     <button className="modalBack" onClick={onClose}>
-                        <span aria-hidden="true">←</span> {t.back}
+                        <span aria-hidden="true">←</span> {backLabel ?? t.back}
                     </button>
                     <button ref={closeRef} className="modalClose" onClick={onClose} aria-label={t.close}>
                         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
@@ -83,9 +84,6 @@ const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
                             {type && <EnergyIcon type={type} size={34} label={translateType(type, lang)} />}
                         </h2>
 
-                        <h3 className="modalSection">{t.description}</h3>
-                        <p className="modalDesc">{describe(card) ?? t.noDescription}</p>
-
                         <h3 className="modalSection">{t.data}</h3>
                         <dl className="modalDatos">
                             {datos.map(([k, v]) => (
@@ -95,6 +93,15 @@ const CartaModal = ({ card, onClose }: { card: Card; onClose: () => void }) => {
                                 </div>
                             ))}
                         </dl>
+
+                        <button
+                            type="button"
+                            className={`favButton${fav ? " favActive" : ""}`}
+                            onClick={() => toggleFavorite(card)}
+                            aria-pressed={fav}
+                        >
+                            <span aria-hidden="true">{fav ? "★" : "☆"}</span> {fav ? t.removeFav : t.addFav}
+                        </button>
                     </div>
                 </section>
 

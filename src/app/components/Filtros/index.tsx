@@ -83,7 +83,6 @@ const TypeSelect = ({ value, onChange, types, lang, label, allLabel }: {
 const Filtros = (p: Props) => {
     const { t, lang, setLang } = useLista()
 
-    // Agrupa los sets por serie (ya vienen ordenados por fecha de la API).
     const grouped = useMemo(() => {
         const map = new Map<string, CardSet[]>()
         p.sets.forEach((s) => map.set(s.series, [...(map.get(s.series) ?? []), s]))

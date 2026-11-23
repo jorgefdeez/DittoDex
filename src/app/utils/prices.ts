@@ -13,7 +13,7 @@ export type PriceSummary = {
   current: number | null
   min: number | null
   max: number | null
-  points: PricePoint[] // serie de medias reales de Cardmarket (30d -> 7d -> 24h -> tendencia)
+  points: PricePoint[] 
   updatedAt: Date | null
   url: string | null
 }
