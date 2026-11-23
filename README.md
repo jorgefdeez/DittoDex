@@ -29,7 +29,7 @@ src/
     axios.ts          Cliente axios: API key, reintentos ante 429/5xx, tipos de error
     pokemonTcg.ts     Endpoints /cards, /sets, /rarities, /types y construcción de la query `q`
   app/
-    page.tsx          Inicio (+ cartas favoritas)
+    page.tsx          Inicio
     cartas/           Catálogo con filtros, grid, paginación y modal de detalle
     noticias/         Placeholder
     components/       Un componente por carpeta: index.tsx + style.css
